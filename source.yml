@@ -290,7 +290,7 @@ version_control:
         type: git
         url: https://ceres-solver.googlesource.com/ceres-solver
         branch: master
-        tag: 1.13.0
+        tag: 2.0.0
 
     - slam/gtsam:
         github: borglab/gtsam
