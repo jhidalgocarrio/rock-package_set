@@ -484,4 +484,7 @@ version_control:
         github: jhidalgocarrio/slam-eds
         branch: $ROCK_BRANCH
 
+    - slam/orogen/eds:
+        github: jhidalgocarrio/slam-orogen-eds
+        branch: $ROCK_BRANCH
 
