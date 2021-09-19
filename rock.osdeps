@@ -1,3 +1,6 @@
+spinnaker:
+    debian, ubuntu: libspinnaker-dev
+
 hdf5:
     debian,ubuntu: libhdf5-dev
 
