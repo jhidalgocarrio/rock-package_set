@@ -1,4 +1,6 @@
 #800 IMPORTANT: new packages must be added at the top of this file
+cmake_package 'drivers/camera_spinnaker'
+cmake_package 'drivers/camera_pylon'
 cmake_package 'slam/eds'
 cmake_package 'tools/openexr'
 cmake_package 'external/glob'
