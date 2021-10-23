@@ -1,6 +1,7 @@
 # IMPORTANT: new packages must be added at the top of this file (after if
 # package_enabled ...)
 
+orogen_package 'slam/orogen/dso'
 orogen_package 'drivers/orogen/camera_spinnaker'
 orogen_package 'slam/orogen/eds'
 orogen_package 'drivers/orogen/camera_davis'
