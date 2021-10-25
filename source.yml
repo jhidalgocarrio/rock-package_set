@@ -136,6 +136,10 @@ version_control:
         github: rock-bundles/bundles-rock_auv.git
         branch: $ROCK_BRANCH
 
+    - bundles/eds:
+        github: jhidalgocarrio/bundles-eds.git
+        branch: $ROCK_BRANCH
+
     - gui/vizkit3d_debug_drawings:
         github: rock-gui/gui-$PACKAGE_BASENAME
         branch: master

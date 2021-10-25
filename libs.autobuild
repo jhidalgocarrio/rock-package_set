@@ -1,4 +1,7 @@
 #800 IMPORTANT: new packages must be added at the top of this file
+
+bundle_package 'bundles/eds'
+
 cmake_package 'slam/dso'
 cmake_package 'perception/depthnn'
 cmake_package 'tools/torch'
