@@ -509,3 +509,23 @@ version_control:
         github: jhidalgocarrio/slam-orogen-dso
         branch: $ROCK_BRANCH
 
+    - gui/pangolin:
+      github: stevenlovegrove/Pangolin.git
+      tag: v0.6
+
+    - slam/g2o:
+      github: RainerKuemmerle/g2o.git
+      branch: master
+      patches:
+            - $AUTOPROJ_SOURCE_DIR/patches/g2o_orb_slam2.patch
+
+    - slam/orb_slam2:
+      type: git
+      url: $GITHUB_ROOT/jhidalgocarrio/slam-orb_slam2.git
+      push_to: $GITHUB_PUSH_ROOT/jhidalgocarrio/slam-orb_slam2.git
+
+    - slam/orogen/orb_slam2:
+      type: git
+      url: $GITHUB_ROOT/jhidalgocarrio/slam-orogen-orb_slam2.git
+      push_to: $GITHUB_PUSH_ROOT/jhidalgocarrio/slam-orogen-orb_slam2.git
+
