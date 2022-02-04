@@ -69,6 +69,70 @@ cmake_package 'slam/gtsam' do |pkg| #Georgia Tech Smooth and Mapping
     pkg.define 'GTSAM_BUILD_TYPE_POSTFIXES','OFF'
 end
 
+## Pangolin gui
+cmake_package 'gui/pangolin' do |pkg|
+    pkg.define 'BUILD_PANGOLIN_LIBOPENEXR','OFF'
+end
+
+## ORB_SLAM2 library
+import_package 'slam/orb_slam2' do |pkg| #ORB SLAM2
+    pkg.depends_on 'gui/pangolin'
+
+    def pkg.buildstamp; "autobuild-stamp" end
+
+    def pkg.prepare
+        super
+        isolate_errors do
+            build
+            progress_done
+        end
+    end
+
+    def pkg.build
+    end
+
+    def pkg.install
+        super
+        in_dir (srcdir) do
+            # Compilation using the dedicated shell script
+            run("build", "./build.sh")
+        end
+
+        # cmake provided by ORB_SLAM2 does not have install. In order to avoid patches Autoproj handles the installation.
+        install_prefix = File.join(prefix, "include", name.split('/')[1])
+        FileUtils.mkdir_p install_prefix
+        files = Dir.glob(File.join(srcdir, "include", "*.h")).sort
+        FileUtils.install(files, File.join(install_prefix))
+
+        # DBoW2 includes
+        install_dbow2_prefix = File.join(install_prefix, "Thirdparty", "DBoW2")
+        files = Dir.glob(File.join(srcdir, "Thirdparty", "DBoW2", "DBoW2", "*.h")).sort
+        FileUtils.mkdir_p File.join(install_dbow2_prefix, "DBoW2")
+        FileUtils.install(files, File.join(install_dbow2_prefix, "DBoW2"))
+
+        files = Dir.glob(File.join(srcdir, "Thirdparty", "DBoW2", "DUtils", "*.h")).sort
+        FileUtils.mkdir_p File.join(install_dbow2_prefix, "DUtils")
+        FileUtils.install(files, File.join(install_dbow2_prefix, "DUtils"))
+
+        # Install the libraries
+        lib_prefix = File.join(prefix, "lib")
+        FileUtils.mkdir_p lib_prefix
+        FileUtils.install(File.join(srcdir, "lib", "libORB_SLAM2.so"), File.join(lib_prefix, "libORB_SLAM2.so"))
+        FileUtils.install(File.join(srcdir, "Thirdparty/DBoW2/lib/", "libDBoW2.so"), File.join(lib_prefix, "libDBoW2.so"))
+
+        # Install the pkgconfig (this can also be done at cmake level)
+        pkgconfig_prefix = File.join(lib_prefix, "pkgconfig")
+        FileUtils.mkdir_p pkgconfig_prefix
+        FileUtils.install(File.join(srcdir, "build", "ORB_SLAM2.pc"), File.join(pkgconfig_prefix, "ORB_SLAM2.pc"))
+
+        # Install ORB vocabulary for DBoW2
+        orb_vocabulary_prefix = File.join(prefix, "share", "orb_slam2")
+        FileUtils.mkdir_p orb_vocabulary_prefix
+        FileUtils.install(File.join(srcdir, "Vocabulary", "ORBvoc.txt"), File.join(orb_vocabulary_prefix, "ORBvoc.txt"))
+
+    end
+end
+
 ruby_package 'control/ruby_sdformat'
 cmake_package "drivers/glfw" do |pkg|
     pkg.define "BUILD_SHARED_LIBS", "ON"
