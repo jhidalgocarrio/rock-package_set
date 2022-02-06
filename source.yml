@@ -535,8 +535,8 @@ version_control:
       patches:
         - $AUTOPROJ_SOURCE_DIR/patches/vrpn.patch
 
-        #- drivers/orogen/vrpn:
-        #github: jhidalgocarrio/drivers-orogen-vrpn
-        # branch: $ROCK_BRANCH
+    - drivers/orogen/vrpn:
+      github: jhidalgocarrio/drivers-orogen-vrpn
+      branch: $ROCK_BRANCH
 
 
