@@ -2,6 +2,10 @@
 
 bundle_package 'bundles/eds'
 
+cmake_package 'drivers/vrpn' do |pkg|
+    pkg.define "BUILD_SHARED_LIBS", "ON"
+end
+
 cmake_package 'slam/dso'
 cmake_package 'perception/depthnn'
 cmake_package 'tools/torch'

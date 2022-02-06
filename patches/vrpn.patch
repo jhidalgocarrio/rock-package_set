@@ -1,0 +1,70 @@
+--- ./CMakeLists.txt
++++ ./CMakeLists.txt
+@@ -1,6 +1,40 @@
+ cmake_minimum_required(VERSION 2.8.3)
+ project(VRPN)
+ 
++
++# Trigger the configuration of the pkg-config config file (*.pc.in)
++# Second option allows to select installation of the generated .pc file
++function(vrpn_prepare_pkgconfig TARGET_NAME DO_INSTALL)
++    foreach(pkgname ${${TARGET_NAME}_PUBLIC_PKGCONFIG})
++        set(DEPS_PKGCONFIG "${DEPS_PKGCONFIG} ${pkgname}")
++    endforeach()
++    set(PKGCONFIG_REQUIRES ${${TARGET_NAME}_PKGCONFIG_REQUIRES})
++    set(PKGCONFIG_CFLAGS ${${TARGET_NAME}_PKGCONFIG_CFLAGS})
++    set(PKGCONFIG_LIBS ${${TARGET_NAME}_PKGCONFIG_LIBS})
++
++    if (TARGET ${TARGET_NAME} AND NOT CMAKE_VERSION VERSION_LESS "3.1")
++        get_property(cxx_standard TARGET ${TARGET_NAME} PROPERTY CXX_STANDARD)
++    else()
++        set(cxx_standard ${CMAKE_CXX_STANDARD})
++    endif()
++
++    if (cxx_standard)
++        set(PKGCONFIG_CFLAGS "${PKGCONFIG_CFLAGS} -std=c++${cxx_standard}")
++    endif()
++
++    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET_NAME}.pc.in)
++        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${TARGET_NAME}.pc.in
++            ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.pc @ONLY)
++        if (DO_INSTALL)
++            install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.pc
++                DESTINATION lib/pkgconfig)
++        endif()
++    else()
++        message("pkg-config: ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET_NAME}.pc.in is not available for configuration")
++    endif()
++endfunction()
++
++
+ #-----------------------------------------------------------------------------
+ # XXX Things to make better.
+ #
+@@ -1543,6 +1577,9 @@ if(NOT SUBPROJECT)
+ 	create_dashboard_scripts("${CMAKE_CURRENT_SOURCE_DIR}/DashboardBuildInitialCache.cmake.in")
+ endif()
+ 
++# PKG_CONFIG for the client
++vrpn_prepare_pkgconfig(${VRPN_CLIENT_LIBRARY} TRUE)
++
+ #-----------------------------------------------------------------------------
+ # If we succeeded, we can go on and include packaging!
+ if(VRPN_INSTALL)
++++ ./vrpn.pc.in
+@@ -0,0 +1,12 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++exec_prefix=@CMAKE_INSTALL_PREFIX@
++libdir=${prefix}/lib
++includedir=${prefix}/include
++
++Name: @TARGET_NAME@
++Description: @PROJECT_DESCRIPTION@
++Version: @PROJECT_VERSION@
++Requires: @PKGCONFIG_REQUIRES@
++Libs: -L${libdir} -l@TARGET_NAME@ @PKGCONFIG_LIBS@
++Cflags: -I${includedir} @PKGCONFIG_CFLAGS@
++
+-- 
+2.17.1
+

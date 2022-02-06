@@ -529,3 +529,14 @@ version_control:
       url: $GITHUB_ROOT/jhidalgocarrio/slam-orogen-orb_slam2.git
       push_to: $GITHUB_PUSH_ROOT/jhidalgocarrio/slam-orogen-orb_slam2.git
 
+    - drivers/vrpn:
+      type: git
+      url: $GITHUB_ROOT/vrpn/vrpn.git
+      patches:
+        - $AUTOPROJ_SOURCE_DIR/patches/vrpn.patch
+
+        #- drivers/orogen/vrpn:
+        #github: jhidalgocarrio/drivers-orogen-vrpn
+        # branch: $ROCK_BRANCH
+
+
