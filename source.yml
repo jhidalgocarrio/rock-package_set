@@ -539,4 +539,8 @@ version_control:
       github: jhidalgocarrio/drivers-orogen-vrpn
       branch: $ROCK_BRANCH
 
+    - eds/orogen/eds_deployments:
+      github: jhidalgocarrio/eds-orogen-eds_deployments.git
+      branch: $ROCK_BRANCH
+
 
